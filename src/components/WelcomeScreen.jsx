@@ -15,7 +15,7 @@ const WelcomeScreen = ({
             <h1 className="welcome-title">Welcome To</h1>
             <div className="logo">
               <img 
-                src="/src/assets/Dark Green Modern Initial Logo.png" 
+                src="/assets/Dark Green Modern Initial Logo.png" 
                 alt="TC Inovasi" 
                 className="logo-image"
               />
@@ -24,7 +24,7 @@ const WelcomeScreen = ({
           
           <div className="welcome-image">
             <img 
-              src="/src/assets/cow.png" 
+              src="/assets/cow.png" 
               alt="Farm Cow" 
             />
           </div>

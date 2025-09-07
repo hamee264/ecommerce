@@ -89,35 +89,35 @@ const HomeScreen = ({
               <div className="carousel-container">
                 <div className={`carousel-slide ${currentSlide === 0 ? 'active' : ''}`}>
                   <img 
-                    src="/src/assets/Frame 3182.png" 
+                    src="/assets/Frame 3182.png" 
                     alt="Fresh Strawberries" 
                     className="carousel-image"
                   />
                 </div>
                 <div className={`carousel-slide ${currentSlide === 1 ? 'active' : ''}`}>
                   <img 
-                    src="/src/assets/Frame 3182 (1).png" 
+                    src="/assets/Frame 3182 (1).png" 
                     alt="Organic Pineapple" 
                     className="carousel-image"
                   />
                 </div>
                 <div className={`carousel-slide ${currentSlide === 2 ? 'active' : ''}`}>
                   <img 
-                    src="/src/assets/Frame 3182 (2).png" 
+                    src="/assets/Frame 3182 (2).png" 
                     alt="Fresh Bananas" 
                     className="carousel-image"
                   />
                 </div>
                 <div className={`carousel-slide ${currentSlide === 3 ? 'active' : ''}`}>
                   <img 
-                    src="/src/assets/Frame 3182 (3).png" 
+                    src="/assets/Frame 3182 (3).png" 
                     alt="Fresh Apples" 
                     className="carousel-image"
                   />
                   </div>
                 <div className={`carousel-slide ${currentSlide === 4 ? 'active' : ''}`}>
                   <img 
-                    src="/src/assets/Frame 3182 (4).png" 
+                    src="/assets/Frame 3182 (4).png" 
                     alt="Organic Carrots" 
                     className="carousel-image"
                   />
@@ -145,7 +145,7 @@ const HomeScreen = ({
                 <h3 className="category-title">All Products</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/Frame 3182.png" 
+                    src="/assets/Frame 3182.png" 
                     alt="All Products" 
                   />
                 </div>
@@ -154,7 +154,7 @@ const HomeScreen = ({
                 <h3 className="category-title">Fruits</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/Frame 3182 (1).png" 
+                    src="/assets/Frame 3182 (1).png" 
                     alt="Fruits" 
                   />
                 </div>
@@ -163,7 +163,7 @@ const HomeScreen = ({
                 <h3 className="category-title">Vegetables</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/Frame 3182 (4).png" 
+                    src="/assets/Frame 3182 (4).png" 
                     alt="Vegetables" 
                   />
                 </div>
@@ -172,7 +172,7 @@ const HomeScreen = ({
                 <h3 className="category-title">Herbs</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/Frame 3182 (9).png" 
+                    src="/assets/Frame 3182 (9).png" 
                     alt="Herbs" 
                   />
                 </div>
@@ -181,7 +181,7 @@ const HomeScreen = ({
                 <h3 className="category-title">Livestock</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/cow.png" 
+                    src="/assets/cow.png" 
                     alt="Livestock" 
                   />
                 </div>
@@ -190,7 +190,7 @@ const HomeScreen = ({
                 <h3 className="category-title">Grains</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/Frame 3182 (13).png" 
+                    src="/assets/Frame 3182 (13).png" 
                     alt="Grains" 
                   />
                 </div>
@@ -199,7 +199,7 @@ const HomeScreen = ({
                 <h3 className="category-title">Flowers</h3>
                 <div className="category-image">
                   <img 
-                    src="/src/assets/Frame 3182 (9).png" 
+                    src="/assets/Frame 3182 (9).png" 
                     alt="Flowers" 
                   />
                 </div>

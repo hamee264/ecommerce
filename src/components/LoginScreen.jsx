@@ -89,10 +89,10 @@ const LoginScreen = ({ onBack, onLogin, onForgotPassword, onSignUp }) => {
         {/* Social Login */}
         <div className="social-login">
           <button className="social-btn google-btn">
-            <img src="/src/assets/Google logo.png" alt="Google" className="social-icon" />
+            <img src="/assets/Google logo.png" alt="Google" className="social-icon" />
           </button>
           <button className="social-btn apple-btn">
-            <img src="/src/assets/Apple logo.png" alt="Apple" className="social-icon" />
+            <img src="/assets/Apple logo.png" alt="Apple" className="social-icon" />
           </button>
           <button className="social-btn facebook-btn">
             <span className="social-icon">f</span>

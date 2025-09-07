@@ -9,7 +9,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
     {
       id: 1,
       name: 'Tomatoes',
-      image: '/src/assets/Frame 3182 (6).png',
+      image: '/assets/Frame 3182 (6).png',
       quantity: '300 kg',
       orderNumber: '#502433',
       status: 'ORDERED'
@@ -17,7 +17,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
     {
       id: 2,
       name: 'Beef',
-      image: '/src/assets/Frame 3182 (11).png',
+      image: '/assets/Frame 3182 (11).png',
       quantity: '3 tons',
       orderNumber: '#502434',
       status: 'ORDERED'
@@ -25,7 +25,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
     {
       id: 3,
       name: 'Dried corn',
-      image: '/src/assets/Frame 3182 (13).png',
+      image: '/assets/Frame 3182 (13).png',
       quantity: '100 kg',
       orderNumber: '#502435',
       status: 'ORDERED'
@@ -36,7 +36,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
     {
       id: 4,
       name: 'Tomatoes',
-      image: '/src/assets/Frame 3182 (6).png',
+      image: '/assets/Frame 3182 (6).png',
       quantity: '200 kg',
       orderNumber: '#502430',
       status: 'DELIVERED'
@@ -44,7 +44,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
     {
       id: 5,
       name: 'Beef',
-      image: '/src/assets/Frame 3182 (11).png',
+      image: '/assets/Frame 3182 (11).png',
       quantity: '2 tons',
       orderNumber: '#502431',
       status: 'DELIVERED'
@@ -52,7 +52,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
     {
       id: 6,
       name: 'Dried corn',
-      image: '/src/assets/Frame 3182 (13).png',
+      image: '/assets/Frame 3182 (13).png',
       quantity: '100 kg',
       orderNumber: '#502432',
       status: 'DELIVERED'

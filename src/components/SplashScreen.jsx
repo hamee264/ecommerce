@@ -15,7 +15,7 @@ const SplashScreen = ({ onComplete }) => {
         <div className="splash-logo">
           <div className="logo">
             <img 
-              src="/src/assets/Dark Green Modern Initial Logo.png" 
+              src="/assets/Dark Green Modern Initial Logo.png" 
               alt="TC Inovasi" 
               className="logo-image"
             />

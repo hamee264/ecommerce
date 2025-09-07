@@ -1,0 +1,336 @@
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.sidebar-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.sidebar-close-btn:hover {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.sidebar-close-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Logo Section */
+.sidebar-logo {
+  padding: 32px 24px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-fc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-letters {
+  font-size: 48px;
+  font-weight: 700;
+  color: #10b981;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.farms {
+  font-size: 16px;
+  font-weight: 600;
+  color: #10b981;
+  letter-spacing: 0.5px;
+}
+
+.connects {
+  font-size: 14px;
+  font-weight: 500;
+  color: #10b981;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation Menu */
+.sidebar-nav {
+  flex: 1;
+  padding: 24px 0;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+}
+
+.nav-button:hover {
+  background-color: #f9fafb;
+}
+
+.nav-button.active {
+  background-color: #10b981;
+  color: white;
+  border-radius: 0 12px 12px 0;
+  margin-right: 16px;
+  position: relative;
+}
+
+.nav-button.active::after {
+  content: '';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid #10b981;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-inactive {
+  color: #6b7280;
+  font-size: 18px;
+}
+
+.icon-active {
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.nav-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #374151;
+  flex: 1;
+}
+
+.nav-button.active .nav-label {
+  color: #ffffff;
+}
+
+.active-indicator {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 280px;
+  }
+  
+  .sidebar-logo {
+    padding: 24px 20px;
+  }
+  
+  .fc-letters {
+    font-size: 40px;
+  }
+  
+  .farms {
+    font-size: 14px;
+  }
+  
+  .connects {
+    font-size: 12px;
+  }
+  
+  .nav-button {
+    padding: 14px 20px;
+    gap: 14px;
+  }
+  
+  .nav-label {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 200px;
+  }
+  
+  .sidebar-logo {
+    padding: 20px 16px;
+  }
+  
+  .fc-letters {
+    font-size: 32px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .farms {
+    font-size: 13px;
+  }
+  
+  .connects {
+    font-size: 11px;
+  }
+  
+  .nav-button {
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  
+  .nav-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80px;
+    height: 100vh;
+    position: fixed;
+    border-right: 1px solid #e5e7eb;
+  }
+  
+  .sidebar-logo {
+    padding: 16px 12px;
+  }
+  
+  .logo-container {
+    justify-content: center;
+  }
+  
+  .logo-fc {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .logo-text {
+    display: none;
+  }
+  
+  .fc-letters {
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .sidebar-nav {
+    padding: 16px 0;
+  }
+  
+  .nav-list {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+  }
+  
+  .nav-item {
+    flex-shrink: 0;
+  }
+  
+  .nav-button {
+    padding: 16px 12px;
+    gap: 0;
+    justify-content: center;
+    border-radius: 0;
+    margin: 0;
+  }
+  
+  .nav-button.active {
+    margin-right: 0;
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .nav-button.active::after {
+    display: none;
+  }
+  
+  .nav-label {
+    display: none;
+  }
+  
+  .nav-icon {
+    margin-right: 0;
+  }
+  
+  .active-indicator {
+    display: none;
+  }
+  
+  .sidebar-close-btn {
+    top: 12px;
+    right: 12px;
+    padding: 6px;
+  }
+  
+  .sidebar-close-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+}

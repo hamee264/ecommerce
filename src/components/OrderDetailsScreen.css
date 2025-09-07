@@ -1,0 +1,364 @@
+.order-details-screen {
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Styles */
+.order-details-header {
+  background-color: #ffffff;
+  z-index: 100;
+  border-bottom: 1px solid #f3f4f6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.navigation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #ffffff;
+  position: relative;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.back-btn, .share-btn {
+  background: none;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  min-width: 48px;
+  min-height: 48px;
+}
+
+.back-btn:hover, .share-btn:hover {
+  background-color: #f0f9ff;
+  transform: scale(1.05);
+}
+
+.screen-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+}
+
+/* Main Content */
+.order-details-content {
+  flex: 1;
+  padding: 20px;
+  padding-bottom: 100px;
+}
+
+/* Order Header */
+.order-header {
+  background-color: #22c55e;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  color: #ffffff;
+}
+
+.order-id {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-date, .order-due, .order-balance {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Items Table */
+.items-table {
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  background-color: #22c55e;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.header-cell {
+  padding: 16px 12px;
+  text-align: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-cell:last-child {
+  border-right: none;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-cell {
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #374151;
+  border-right: 1px solid #e5e7eb;
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+.table-cell.description {
+  text-align: left;
+  font-weight: 500;
+}
+
+.table-cell.rate, .table-cell.qty, .table-cell.amount {
+  font-weight: 600;
+}
+
+/* Order Summary */
+.order-summary {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 16px;
+}
+
+.summary-row.total {
+  border-top: 2px solid #e5e7eb;
+  margin-top: 12px;
+  padding-top: 16px;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.summary-row.balance {
+  font-weight: 700;
+  font-size: 18px;
+  color: #22c55e;
+}
+
+.summary-label {
+  color: #6b7280;
+}
+
+.summary-value {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Authorized Sign */
+.authorized-sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.sign-line {
+  width: 200px;
+  height: 1px;
+  background-color: #d1d5db;
+  margin-bottom: 8px;
+}
+
+.sign-label {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Bottom Navigation */
+.bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.nav-item.active {
+  color: #22c55e;
+}
+
+.nav-item:not(.active) {
+  color: #6b7280;
+}
+
+.nav-item:hover {
+  background-color: #f3f4f6;
+}
+
+.nav-icon {
+  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nav-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ef4444;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  border: 2px solid #ffffff;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .order-details-content {
+    padding: 40px;
+    padding-bottom: 120px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .order-header {
+    padding: 24px;
+  }
+  
+  .order-id {
+    font-size: 28px;
+  }
+  
+  .order-date, .order-due, .order-balance {
+    font-size: 18px;
+  }
+  
+  .table-header, .table-row {
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+  }
+  
+  .header-cell, .table-cell {
+    padding: 20px 16px;
+    font-size: 16px;
+  }
+  
+  .order-summary {
+    padding: 24px;
+  }
+  
+  .summary-row {
+    font-size: 18px;
+  }
+  
+  .summary-row.total, .summary-row.balance {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .order-details-content {
+    padding: 60px;
+    padding-bottom: 140px;
+    max-width: 1000px;
+  }
+  
+  .order-header {
+    padding: 32px;
+  }
+  
+  .order-id {
+    font-size: 32px;
+  }
+  
+  .order-date, .order-due, .order-balance {
+    font-size: 20px;
+  }
+  
+  .header-cell, .table-cell {
+    padding: 24px 20px;
+    font-size: 18px;
+  }
+  
+  .order-summary {
+    padding: 32px;
+  }
+  
+  .summary-row {
+    font-size: 20px;
+  }
+  
+  .summary-row.total, .summary-row.balance {
+    font-size: 24px;
+  }
+}

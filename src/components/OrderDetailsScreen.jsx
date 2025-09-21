@@ -7,6 +7,7 @@ const OrderDetailsScreen = ({
   onBack, 
   onNavigateToHome,
   onNavigateToCart,
+  onNavigateToProfile,
   cartItemCount = 0 
 }) => {
   // Sample order data if none provided
@@ -120,7 +121,7 @@ const OrderDetailsScreen = ({
             </div>
             <span className="nav-label">Cart</span>
           </div>
-          <div className="nav-item active">
+          <div className="nav-item active" onClick={onNavigateToProfile}>
             <div className="nav-icon">
               <User size={20} />
             </div>

@@ -7,6 +7,9 @@ const ProfileScreen = ({
   onNavigateToHome,
   onNavigateToCart,
   onNavigateToMyOrders,
+  onNavigateToAccountSettings,
+  onNavigateToNotifications,
+  onNavigateToHelpAndSupport,
   cartItemCount = 0 
 }) => {
   return (
@@ -56,7 +59,7 @@ const ProfileScreen = ({
               <div className="option-arrow">→</div>
             </div>
 
-            <div className="option-card">
+            <div className="option-card" onClick={onNavigateToAccountSettings}>
               <div className="option-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -70,7 +73,7 @@ const ProfileScreen = ({
               <div className="option-arrow">→</div>
             </div>
 
-            <div className="option-card">
+            <div className="option-card" onClick={onNavigateToNotifications}>
               <div className="option-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -84,7 +87,7 @@ const ProfileScreen = ({
               <div className="option-arrow">→</div>
             </div>
 
-            <div className="option-card">
+            <div className="option-card" onClick={onNavigateToHelpAndSupport}>
               <div className="option-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M9 12l2 2 4-4"/>

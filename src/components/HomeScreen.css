@@ -239,106 +239,107 @@
   margin-top: 0;
 }
 
-/* Farm Products Section - Carousel */
-.farm-products-carousel {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  margin-bottom: 32px;
-  overflow: hidden;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+/* Hero Carousel Section */
+.hero-carousel-section {
+  margin-bottom: 40px;
 }
 
-.carousel-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.carousel-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+.hero-carousel-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 32px;
+  /* background-color: #f0fdf4; */
+  border-radius: 16px;
+  padding: 24px;
+  overflow: hidden;
 }
 
-.carousel-slide.active {
-  opacity: 1;
+/* Left Panel: Image */
+.hero-image-panel {
+  flex: 1;
+  max-width: 50%;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.carousel-slide.active .carousel-image {
-  filter: brightness(1.2) contrast(1.3) saturate(1.4);
-}
-
-.carousel-image {
+.hero-main-image {
   width: 100%;
-  height: 100%;
+  height: auto;
+  display: block;
   object-fit: cover;
-  filter: brightness(1.2) contrast(1.4) saturate(1.5);
-  transition: filter 0.3s ease;
 }
 
-/* Carousel captions removed for simple design */
-
-/* Carousel Navigation Dots */
-.carousel-nav {
+.hero-nav-buttons {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 16px;
+  left: 16px;
   display: flex;
   gap: 8px;
-  z-index: 10;
 }
 
-.carousel-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+.hero-nav-btn {
+  background-color: #22c55e;
+  color: white;
   border: none;
-  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
-.carousel-dot.active {
-  background-color: #ffffff;
+.hero-nav-btn:hover {
+  background-color: #16a34a;
 }
 
-.carousel-dot:hover {
-  background-color: rgba(255, 255, 255, 0.8);
+/* Right Panel: Text Content */
+.hero-text-panel {
+  flex: 1;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 16px;
 }
 
-/* Carousel Controls removed for simple design */
-
-/* Remove old farm products grid styles */
-.farm-products-grid {
-  display: none;
+.hero-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #166534;
+  line-height: 1.2;
 }
 
-.farm-product-card {
-  display: none;
+.hero-description {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.6;
 }
 
-.farm-product-image {
-  display: none;
+.hero-cta-btn {
+  background-color: #22c55e;
+  color: #ffffff;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.product-info {
-  display: none;
+.hero-cta-btn:hover {
+  background-color: #16a34a;
+  transform: translateY(-2px);
 }
 
-.product-name {
-  display: none;
-}
-
-.add-to-cart-btn {
+/* Hide old carousel styles */
+.farm-products-carousel {
   display: none;
 }
 
@@ -633,5 +634,24 @@
   
   .category-card {
     padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-carousel-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image-panel, .hero-text-panel {
+    max-width: 100%;
+  }
+
+  .hero-text-panel {
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: 28px;
   }
 }

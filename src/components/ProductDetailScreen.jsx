@@ -7,6 +7,8 @@ const ProductDetailScreen = ({
   onBack, 
   onAddToCart, 
   onNavigateToCart,
+  onNavigateToHome,
+  onNavigateToProfile,
   cartItemCount = 0 
 }) => {
   if (!product) {
@@ -47,13 +49,30 @@ const ProductDetailScreen = ({
               <h2 className="product-detail-name">{product.name}</h2>
               <p className="product-detail-description">{product.description}</p>
               <div className="product-detail-price">{product.price}</div>
+
+              <div className="stock-info">
+                {product.inStock ? (
+                  <span className="stock-status in-stock">
+                    {product.stock} remaining
+                  </span>
+                ) : (
+                  <span className="stock-status out-of-stock">
+                    Out of stock
+                  </span>
+                )}
+              </div>
               
               {/* Add to Cart Button */}
               <button 
-                className="product-detail-add-to-cart"
-                onClick={() => onAddToCart(product)}
+                className={`product-detail-add-to-cart ${!product.inStock ? 'disabled' : ''}`}
+                onClick={() => {
+                  if (product.inStock) {
+                    onAddToCart(product);
+                  }
+                }}
+                disabled={!product.inStock}
               >
-                Add to Cart
+                {product.inStock ? 'Add to Cart' : 'Out of stock'}
               </button>
             </div>
           </div>
@@ -61,7 +80,7 @@ const ProductDetailScreen = ({
 
         {/* Bottom Navigation */}
         <nav className="bottom-navigation">
-          <div className="nav-item">
+          <div className="nav-item" onClick={onNavigateToHome}>
             <div className="nav-icon">
               <Home size={20} />
             </div>
@@ -76,7 +95,7 @@ const ProductDetailScreen = ({
             </div>
             <span className="nav-label">Cart</span>
           </div>
-          <div className="nav-item">
+          <div className="nav-item" onClick={onNavigateToProfile}>
             <div className="nav-icon">
               <User size={20} />
             </div>

@@ -1,26 +1,51 @@
-import { Search, Bell, Home, ShoppingCart, User } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Search, Bell, Home, ShoppingCart, User, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
 
-const HomeScreen = ({ 
+const HomeScreen = ({
   onNavigateToCart,
   onNavigateToCategory,
   onNavigateToProfile,
+  onSearch,
   cartItemCount = 0
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [localSearchQuery, setLocalSearchQuery] = useState('');
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const showSlide = (index) => {
-    setCurrentSlide(index);
-  };
+  const slides = [
+    {
+      image: '/assets/Frame 3182.png',
+      title: 'Fresh & Healthy',
+      description: 'Discover the best farm-fresh products, from vibrant fruits to organic vegetables, delivered right to your door.',
+    },
+    {
+      image: '/assets/Frame 3182 (1).png',
+      title: 'Quality Livestock',
+      description: 'Ethically raised and sourced for the best quality meat and dairy products.',
+    },
+    {
+      image: '/assets/Frame 3182 (2).png',
+      title: 'Organic Grains',
+      description: 'A wide selection of whole grains, flours, and cereals for a healthy diet.',
+    },
+    {
+      image: '/assets/Frame 3182 (3).png',
+      title: 'Sweet & Juicy',
+      description: 'Hand-picked, seasonal fruits at the peak of their freshness and flavor.',
+    },
+    {
+      image: '/assets/Frame 3182 (4).png',
+      title: 'Vibrant Flowers',
+      description: 'Brighten your home with our beautiful, locally-grown flower arrangements.',
+    },
+  ];
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % 5);
-  };
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, [slides.length]);
 
-  const previousSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + 5) % 5);
-  };
+  const previousSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
 
   // Auto-advance carousel every 5 seconds
   useEffect(() => {
@@ -29,17 +54,15 @@ const HomeScreen = ({
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [nextSlide]);
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    setLocalSearchQuery(e.target.value);
   };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      onNavigateToCategory('search');
-    }
+    onSearch(localSearchQuery);
   };
 
   return (
@@ -61,7 +84,7 @@ const HomeScreen = ({
                 type="text" 
                 placeholder="Search" 
                 className="search-input"
-                value={searchQuery}
+                value={localSearchQuery}
                 onChange={handleSearchChange}
               />
               <button 
@@ -82,57 +105,35 @@ const HomeScreen = ({
 
         {/* Main Content */}
         <main className="home-content">
-          {/* Farm Products Section - Simple Carousel */}
-          <section className="farm-products-section">
-            <h2 className="section-title">Farm Products</h2>
-            <div className="farm-products-carousel">
-              <div className="carousel-container">
-                <div className={`carousel-slide ${currentSlide === 0 ? 'active' : ''}`}>
-                  <img 
-                    src="/assets/Frame 3182.png" 
-                    alt="Fresh Strawberries" 
-                    className="carousel-image"
-                  />
-                </div>
-                <div className={`carousel-slide ${currentSlide === 1 ? 'active' : ''}`}>
-                  <img 
-                    src="/assets/Frame 3182 (1).png" 
-                    alt="Organic Pineapple" 
-                    className="carousel-image"
-                  />
-                </div>
-                <div className={`carousel-slide ${currentSlide === 2 ? 'active' : ''}`}>
-                  <img 
-                    src="/assets/Frame 3182 (2).png" 
-                    alt="Fresh Bananas" 
-                    className="carousel-image"
-                  />
-                </div>
-                <div className={`carousel-slide ${currentSlide === 3 ? 'active' : ''}`}>
-                  <img 
-                    src="/assets/Frame 3182 (3).png" 
-                    alt="Fresh Apples" 
-                    className="carousel-image"
-                  />
-                  </div>
-                <div className={`carousel-slide ${currentSlide === 4 ? 'active' : ''}`}>
-                  <img 
-                    src="/assets/Frame 3182 (4).png" 
-                    alt="Organic Carrots" 
-                    className="carousel-image"
-                  />
+          {/* Hero Carousel Section */}
+          <section className="hero-carousel-section">
+            <div className="hero-carousel-container">
+              {/* Image Panel (Left Side) */}
+              <div className="hero-image-panel">
+                <img 
+                  src={slides[currentSlide].image} 
+                  alt={slides[currentSlide].title}
+                  className="hero-main-image"
+                />
+                <div className="hero-nav-buttons">
+                  <button className="hero-nav-btn" onClick={previousSlide}>
+                    <ArrowLeft size={24} />
+                  </button>
+                  <button className="hero-nav-btn" onClick={nextSlide}>
+                    <ArrowRight size={24} />
+                  </button>
                 </div>
               </div>
-              
-              {/* Carousel Navigation */}
-              <div className="carousel-nav">
-                {[...Array(5)].map((_, index) => (
-                <button 
-                    key={index}
-                    className={`carousel-dot ${currentSlide === index ? 'active' : ''}`} 
-                    onClick={() => setCurrentSlide(index)}
-                ></button>
-                ))}
+
+              {/* Text Panel (Right Side) */}
+              <div className="hero-text-panel">
+                <h2 className="hero-title">{slides[currentSlide].title}</h2>
+                <p className="hero-description">
+                  {slides[currentSlide].description}
+                </p>
+                <button className="hero-cta-btn" onClick={() => onNavigateToCategory('all')}>
+                  Shop Now
+                </button>
               </div>
             </div>
           </section>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import './MyOrderScreen.css';
 
-const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
+const MyOrderScreen = ({ onBack, onNavigateToOrderDetails, onNavigateToHome, onNavigateToCart, onNavigateToProfile }) => {
   const [activeTab, setActiveTab] = useState('ongoing');
 
   const ongoingOrders = [
@@ -126,7 +126,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
 
         {/* Bottom Navigation */}
         <nav className="bottom-navigation">
-          <div className="nav-item">
+          <div className="nav-item" onClick={onNavigateToHome}>
             <div className="nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -135,7 +135,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
             </div>
             <span className="nav-label">Home</span>
           </div>
-          <div className="nav-item">
+          <div className="nav-item" onClick={onNavigateToCart}>
             <div className="nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="9" cy="21" r="1"/>
@@ -145,7 +145,7 @@ const MyOrderScreen = ({ onBack, onNavigateToOrderDetails }) => {
             </div>
             <span className="nav-label">Cart</span>
           </div>
-          <div className="nav-item active">
+          <div className="nav-item active" onClick={onNavigateToProfile}>
             <div className="nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>

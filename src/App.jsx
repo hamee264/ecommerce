@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SplashScreen from './components/SplashScreen'
 import WelcomeScreen from './components/WelcomeScreen'
 import LoginScreen from './components/LoginScreen'
@@ -21,6 +21,9 @@ import MyOrderScreen from './components/MyOrderScreen'
 import ProductDetailScreen from './components/ProductDetailScreen'
 import ProfileScreen from './components/ProfileScreen'
 import OrderDetailsScreen from './components/OrderDetailsScreen'
+import AccountSettingsScreen from './components/AccountSettingsScreen'
+import NotificationsScreen from './components/NotificationsScreen'
+import HelpAndSupportScreen from './components/HelpAndSupportScreen'
 
 // CSS imports
 import './components/ProfileScreen.css'
@@ -46,16 +49,41 @@ import './components/PaymentMethodScreen.css'
 import './components/PaymentSuccessScreen.css'
 import './components/MyOrderScreen.css'
 import './components/ProductDetailScreen.css'
+import './components/AccountSettingsScreen.css'
+import './components/NotificationsScreen.css'
+import './components/HelpAndSupportScreen.css'
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('splash')
   const [userEmail, setUserEmail] = useState('')
   const [currentCategory, setCurrentCategory] = useState('')
   const [activeSidebarItem, setActiveSidebarItem] = useState('dashboard')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [cartItems, setCartItems] = useState([])
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query.trim()) {
+      setCurrentScreen('productListing');
+      setCurrentCategory('search');
+    } else {
+      // Optional: handle empty search, e.g., go back to home or clear results
+      setCurrentScreen('home');
+      setCurrentCategory('');
+    }
+  };
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem('ecommerce_cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('ecommerce_cart', JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [selectedOrder, setSelectedOrder] = useState(null)
+  const [previousScreen, setPreviousScreen] = useState(null)
+  const [products, setProducts] = useState([]); // Lifted products state
 
   const handleGetStarted = () => {
     setCurrentScreen('login')
@@ -107,38 +135,69 @@ function App() {
   }
 
   const handleNavigateToCart = () => {
+    setPreviousScreen(currentScreen)
     setCurrentScreen('cart')
   }
 
-  const handleAddToCart = (product) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id)
-      if (existingItem) {
-        return prevItems.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      } else {
-        return [...prevItems, { ...product, quantity: 1 }]
-      }
-    })
+  const handleBackFromCart = () => {
+    setCurrentScreen(previousScreen || 'home')
   }
+
+  const handleAddToCart = (productToAdd) => {
+    // First, update the cart items
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === productToAdd.id);
+      if (existingItem) {
+        if (existingItem.quantity < productToAdd.stock) {
+          return prevItems.map(item =>
+            item.id === productToAdd.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
+        return prevItems; // Silently ignore if stock limit is reached
+      } else {
+        if (productToAdd.stock > 0) {
+          return [...prevItems, { ...productToAdd, quantity: 1 }];
+        }
+        return prevItems; // Silently ignore if out of stock
+      }
+    });
+
+    // Then, update the central products state to reflect the new stock count
+    setProducts(currentProducts =>
+      currentProducts.map(p => {
+        if (p.id === productToAdd.id) {
+          const newStock = p.stock - 1;
+          return {
+            ...p,
+            stock: newStock,
+            inStock: newStock > 0,
+          };
+        }
+        return p;
+      })
+    );
+  };
 
   const handleUpdateQuantity = (productId, newQuantity) => {
     if (newQuantity <= 0) {
-      handleRemoveFromCart(productId)
-      return
+      handleRemoveFromCart(productId);
+      return;
     }
-    
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === productId
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    )
-  }
+
+    setCartItems(prevItems => {
+      const itemToUpdate = prevItems.find(item => item.id === productId);
+
+      if (itemToUpdate && newQuantity > itemToUpdate.stock) {
+        return prevItems; // Silently ignore if stock limit is reached
+      }
+
+      return prevItems.map(item =>
+        item.id === productId ? { ...item, quantity: newQuantity } : item
+      );
+    });
+  };
 
   const handleRemoveFromCart = (productId) => {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId))
@@ -149,9 +208,11 @@ function App() {
   }
 
   const handleNavigateToProductDetail = (product) => {
-    setSelectedProduct(product)
-    setCurrentScreen('productDetail')
-  }
+    // Ensure we are passing the most up-to-date product object
+    const currentProduct = products.find(p => p.id === product.id) || product;
+    setSelectedProduct(currentProduct);
+    setCurrentScreen('productDetail');
+  };
 
   const handleBackFromProductDetail = () => {
     setSelectedProduct(null)
@@ -170,6 +231,18 @@ function App() {
     setSelectedOrder(order)
     setCurrentScreen('orderDetails')
   }
+
+  const handleNavigateToAccountSettings = () => {
+    setCurrentScreen('accountSettings');
+  };
+
+  const handleNavigateToNotifications = () => {
+    setCurrentScreen('notifications');
+  };
+
+  const handleNavigateToHelpAndSupport = () => {
+    setCurrentScreen('helpAndSupport');
+  };
 
   const handleSidebarNavigation = (item) => {
     setActiveSidebarItem(item)
@@ -262,6 +335,7 @@ function App() {
             onNavigateToCategory={handleNavigateToCategory}
             onNavigateToCart={handleNavigateToCart}
             onNavigateToProfile={handleNavigateToProfile}
+            onSearch={handleSearch} // Pass the handler
             cartItemCount={cartItems.length}
           />
         )
@@ -276,6 +350,11 @@ function App() {
             onAddToCart={handleAddToCart}
             onNavigateToProductDetail={handleNavigateToProductDetail}
             onNavigateToProfile={handleNavigateToProfile}
+            onNavigateToHome={() => setCurrentScreen('home')}
+            onSearch={handleSearch} // Pass the handler
+            setSearchQuery={setSearchQuery} // Pass the setter
+            products={products} // Pass down products
+            setProducts={setProducts} // Pass down setter
             cartItemCount={cartItems.length}
           />
         )
@@ -284,9 +363,10 @@ function App() {
         return (
           <CartScreen 
             cartItems={cartItems}
-            onBack={() => setCurrentScreen('home')}
-            onNavigateToHome={() => setCurrentScreen('home')}
+            onBack={handleBackFromCart}
+            onNavigateToHome={handleBackFromCart}
             onNavigateToAddress={() => setCurrentScreen('address')}
+            onNavigateToProfile={handleNavigateToProfile}
             onUpdateQuantity={handleUpdateQuantity}
             onRemoveItem={handleRemoveFromCart}
             onClearCart={handleClearCart}
@@ -328,16 +408,22 @@ function App() {
           <MyOrderScreen
             onBack={() => setCurrentScreen('profile')}
             onNavigateToOrderDetails={handleNavigateToOrderDetails}
+            onNavigateToHome={() => setCurrentScreen('home')}
+            onNavigateToCart={handleNavigateToCart}
+            onNavigateToProfile={handleNavigateToProfile}
           />
         )
       
       case 'productDetail':
         return (
           <ProductDetailScreen
+            key={`${selectedProduct?.id}-${selectedProduct?.stock}`}
             product={selectedProduct}
             onBack={handleBackFromProductDetail}
             onAddToCart={handleAddToCart}
             onNavigateToCart={handleNavigateToCart}
+            onNavigateToHome={() => setCurrentScreen('home')}
+            onNavigateToProfile={handleNavigateToProfile}
             cartItemCount={cartItems.length}
           />
         )
@@ -360,6 +446,9 @@ function App() {
             onNavigateToHome={() => setCurrentScreen('home')}
             onNavigateToCart={handleNavigateToCart}
             onNavigateToMyOrders={handleNavigateToMyOrders}
+            onNavigateToAccountSettings={handleNavigateToAccountSettings}
+            onNavigateToNotifications={handleNavigateToNotifications}
+            onNavigateToHelpAndSupport={handleNavigateToHelpAndSupport}
             cartItemCount={cartItems.length}
           />
         )
@@ -371,10 +460,20 @@ function App() {
             onBack={() => setCurrentScreen('myOrder')}
             onNavigateToHome={() => setCurrentScreen('home')}
             onNavigateToCart={handleNavigateToCart}
+            onNavigateToProfile={handleNavigateToProfile}
             cartItemCount={cartItems.length}
           />
         )
       
+      case 'accountSettings':
+        return <AccountSettingsScreen onBack={() => setCurrentScreen('profile')} />;
+
+      case 'notifications':
+        return <NotificationsScreen onBack={() => setCurrentScreen('profile')} />;
+
+      case 'helpAndSupport':
+        return <HelpAndSupportScreen onBack={() => setCurrentScreen('profile')} />;
+
       default:
         return <HomeScreen onNavigateToCategory={handleNavigateToCategory} onOpenSidebar={handleSidebarNavigation} />
     }
@@ -384,4 +483,3 @@ function App() {
 }
 
 export default App
-

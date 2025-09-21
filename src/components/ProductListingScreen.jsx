@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { ArrowLeft, Search, Home, ShoppingCart, User } from 'lucide-react';
 import './ProductListingScreen.css';
 
@@ -10,6 +10,9 @@ const ProductListingScreen = ({
   onAddToCart,
   onNavigateToProductDetail,
   onNavigateToProfile,
+  onNavigateToHome,
+  onSearch,
+  setSearchQuery,
   cartItemCount = 0
 }) => {
   const [products, setProducts] = useState([]);
@@ -19,91 +22,111 @@ const ProductListingScreen = ({
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
 
+  const handleAddToCartAndUpdateStock = (productToAdd) => {
+    // Call the original onAddToCart to update the global cart state
+    onAddToCart(productToAdd);
+
+    // Update the local products state to reflect the new stock count
+    setProducts(currentProducts =>
+      currentProducts.map(p => {
+        if (p.id === productToAdd.id) {
+          const newStock = p.stock - 1;
+          return {
+            ...p,
+            stock: newStock,
+            inStock: newStock > 0,
+          };
+        }
+        return p;
+      })
+    );
+  };
+
   // Product data for different categories
   const categoryProducts = useMemo(() => ({
     fruits: [
-      { id: 1, name: 'Pineapple', image: '/assets/Frame 3182 (1).png', price: '$2.99', description: 'Sweet tropical pineapple' },
-      { id: 2, name: 'Banana', image: '/assets/Frame 3182 (2).png', price: '$1.49', description: 'Fresh yellow bananas' },
-      { id: 3, name: 'Apple', image: '/assets/Frame 3182 (3).png', price: '$2.29', description: 'Crisp red apples' },
-      { id: 4, name: 'Avocado', image: '/assets/Frame 3182 (15).png', price: '$3.99', description: 'Creamy ripe avocados' },
-      { id: 5, name: 'Orange', image: '/assets/Frame 3182 (16).png', price: '$1.99', description: 'Juicy fresh oranges' },
-      { id: 6, name: 'Watermelon', image: '/assets/Frame 3182 (17).png', price: '$4.99', description: 'Sweet summer watermelon' },
-      { id: 7, name: 'Grapes', image: '/assets/Frame 3182 (18).png', price: '$3.49', description: 'Fresh green grapes' },
-      { id: 8, name: 'Coconut', image: '/assets/Frame 3182 (19).png', price: '$2.99', description: 'Fresh tropical coconut' },
-      { id: 9, name: 'Guava', image: '/assets/Frame 3182 (20).png', price: '$2.79', description: 'Sweet tropical guava' },
-      { id: 10, name: 'Mango', image: '/assets/Frame 3182 (1).png', price: '$3.49', description: 'Sweet ripe mango' },
-      { id: 11, name: 'Strawberry', image: '/assets/Frame 3182.png', price: '$4.99', description: 'Fresh red strawberries' },
-      { id: 12, name: 'Blueberry', image: '/assets/Frame 3182 (2).png', price: '$5.99', description: 'Antioxidant-rich blueberries' }
+      { id: 1, name: 'Pineapple', image: '/assets/Frame 3182 (1).png', price: '$2.99', description: 'Sweet tropical pineapple', stock: 15, inStock: true },
+      { id: 2, name: 'Banana', image: '/assets/Frame 3182 (2).png', price: '$1.49', description: 'Fresh yellow bananas', stock: 8, inStock: true },
+      { id: 3, name: 'Apple', image: '/assets/Frame 3182 (3).png', price: '$2.29', description: 'Crisp red apples', stock: 0, inStock: false },
+      { id: 4, name: 'Avocado', image: '/assets/Frame 3182 (15).png', price: '$3.99', description: 'Creamy ripe avocados', stock: 3, inStock: true },
+      { id: 5, name: 'Orange', image: '/assets/Frame 3182 (16).png', price: '$1.99', description: 'Juicy fresh oranges', stock: 12, inStock: true },
+      { id: 6, name: 'Watermelon', image: '/assets/Frame 3182 (17).png', price: '$4.99', description: 'Sweet summer watermelon', stock: 0, inStock: false },
+      { id: 7, name: 'Grapes', image: '/assets/Frame 3182 (18).png', price: '$3.49', description: 'Fresh green grapes', stock: 5, inStock: true },
+      { id: 8, name: 'Coconut', image: '/assets/Frame 3182 (19).png', price: '$2.99', description: 'Fresh tropical coconut', stock: 7, inStock: true },
+      { id: 9, name: 'Guava', image: '/assets/Frame 3182 (20).png', price: '$2.79', description: 'Sweet tropical guava', stock: 2, inStock: true },
+      { id: 10, name: 'Mango', image: '/assets/Frame 3182 (1).png', price: '$3.49', description: 'Sweet ripe mango', stock: 9, inStock: true },
+      { id: 11, name: 'Strawberry', image: '/assets/Frame 3182.png', price: '$4.99', description: 'Fresh red strawberries', stock: 0, inStock: false },
+      { id: 12, name: 'Blueberry', image: '/assets/Frame 3182 (2).png', price: '$5.99', description: 'Antioxidant-rich blueberries', stock: 4, inStock: true }
     ],
     vegetables: [
-      { id: 1, name: 'Bell Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.99', description: 'Fresh colorful bell peppers' },
-      { id: 2, name: 'Carrots', image: '/assets/Frame 3182 (5).png', price: '$1.49', description: 'Sweet crunchy carrots' },
-      { id: 3, name: 'Tomatoes', image: '/assets/Frame 3182 (6).png', price: '$2.29', description: 'Juicy ripe tomatoes' },
-      { id: 4, name: 'Onions', image: '/assets/Frame 3182 (7).png', price: '$1.79', description: 'Fresh cooking onions' },
-      { id: 5, name: 'Potatoes', image: '/assets/Frame 3182 (8).png', price: '$2.99', description: 'Versatile cooking potatoes' },
-      { id: 6, name: 'Spinach', image: '/assets/Frame 3182 (9).png', price: '$1.99', description: 'Nutritious leafy greens' }
+      { id: 1, name: 'Bell Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.99', description: 'Fresh colorful bell peppers', stock: 10, inStock: true },
+      { id: 2, name: 'Carrots', image: '/assets/Frame 3182 (5).png', price: '$1.49', description: 'Sweet crunchy carrots', stock: 0, inStock: false },
+      { id: 3, name: 'Tomatoes', image: '/assets/Frame 3182 (6).png', price: '$2.29', description: 'Juicy ripe tomatoes', stock: 6, inStock: true },
+      { id: 4, name: 'Onions', image: '/assets/Frame 3182 (7).png', price: '$1.79', description: 'Fresh cooking onions', stock: 14, inStock: true },
+      { id: 5, name: 'Potatoes', image: '/assets/Frame 3182 (8).png', price: '$2.99', description: 'Versatile cooking potatoes', stock: 3, inStock: true },
+      { id: 6, name: 'Spinach', image: '/assets/Frame 3182 (9).png', price: '$1.99', description: 'Nutritious leafy greens', stock: 0, inStock: false }
     ],
     dairy: [
-      { id: 1, name: 'Fresh Milk', image: '/assets/Frame 3182 (10).png', price: '$3.99', description: 'Fresh farm milk' },
-      { id: 2, name: 'Cheese', image: '/assets/Frame 3182 (21).png', price: '$4.99', description: 'Artisan farm cheese' },
-      { id: 3, name: 'Yogurt', image: '/assets/Frame 3182 (22).png', price: '$2.49', description: 'Creamy natural yogurt' },
-      { id: 4, name: 'Butter', image: '/assets/Frame 3182 (23).png', price: '$3.29', description: 'Rich farm butter' },
-      { id: 5, name: 'Cream', image: '/assets/Frame 3182 (24).png', price: '$2.99', description: 'Fresh heavy cream' }
+      { id: 1, name: 'Fresh Milk', image: '/assets/Frame 3182 (10).png', price: '$3.99', description: 'Fresh farm milk', stock: 8, inStock: true },
+      { id: 2, name: 'Cheese', image: '/assets/Frame 3182 (21).png', price: '$4.99', description: 'Artisan farm cheese', stock: 0, inStock: false },
+      { id: 3, name: 'Yogurt', image: '/assets/Frame 3182 (22).png', price: '$2.49', description: 'Creamy natural yogurt', stock: 12, inStock: true },
+      { id: 4, name: 'Butter', image: '/assets/Frame 3182 (23).png', price: '$3.29', description: 'Rich farm butter', stock: 5, inStock: true },
+      { id: 5, name: 'Cream', image: '/assets/Frame 3182 (24).png', price: '$2.99', description: 'Fresh heavy cream', stock: 0, inStock: false }
     ],
     meats: [
-      { id: 1, name: 'Beef', image: '/assets/Frame 3182 (11).png', price: '$8.99', description: 'Premium farm beef' },
-      { id: 2, name: 'Chicken', image: '/assets/Frame 3182 (25).png', price: '$6.99', description: 'Fresh farm chicken' },
-      { id: 3, name: 'Pork', image: '/assets/Frame 3182 (26).png', price: '$7.99', description: 'Quality farm pork' },
-      { id: 4, name: 'Lamb', image: '/assets/Frame 3182 (11).png', price: '$9.99', description: 'Tender farm lamb' }
+      { id: 1, name: 'Beef', image: '/assets/Frame 3182 (11).png', price: '$8.99', description: 'Premium farm beef', stock: 4, inStock: true },
+      { id: 2, name: 'Chicken', image: '/assets/Frame 3182 (25).png', price: '$6.99', description: 'Fresh farm chicken', stock: 0, inStock: false },
+      { id: 3, name: 'Pork', image: '/assets/Frame 3182 (26).png', price: '$7.99', description: 'Quality farm pork', stock: 6, inStock: true },
+      { id: 4, name: 'Lamb', image: '/assets/Frame 3182 (11).png', price: '$9.99', description: 'Tender farm lamb', stock: 2, inStock: true }
     ],
     livestock: [
-      { id: 1, name: 'Cows', image: '/assets/cow.png', price: '$1200', description: 'Healthy dairy and beef cattle' },
-      { id: 2, name: 'Goats', image: '/assets/Frame 3182 (14).png', price: '$300', description: 'Quality dairy and meat goats' },
-      { id: 3, name: 'Sheep', image: '/assets/Frame 3182 (15).png', price: '$250', description: 'Premium wool and meat sheep' },
-      { id: 4, name: 'Pigs', image: '/assets/Frame 3182 (16).png', price: '$400', description: 'Healthy farm-raised pigs' }
+      { id: 1, name: 'Cows', image: '/assets/cow.png', price: '$1200', description: 'Healthy dairy and beef cattle', stock: 3, inStock: true },
+      { id: 2, name: 'Goats', image: '/assets/Frame 3182 (14).png', price: '$300', description: 'Quality dairy and meat goats', stock: 0, inStock: false },
+      { id: 3, name: 'Sheep', image: '/assets/Frame 3182 (15).png', price: '$250', description: 'Premium wool and meat sheep', stock: 5, inStock: true },
+      { id: 4, name: 'Pigs', image: '/assets/Frame 3182 (16).png', price: '$400', description: 'Healthy farm-raised pigs', stock: 2, inStock: true }
     ],
     seafood: [
-      { id: 1, name: 'Salmon', image: '/assets/Frame 3182 (12).png', price: '$12.99', description: 'Fresh wild salmon' },
-      { id: 2, name: 'Shrimp', image: '/assets/Frame 3182 (12).png', price: '$10.99', description: 'Large fresh shrimp' },
-      { id: 3, name: 'Tuna', image: '/assets/Frame 3182 (12).png', price: '$11.99', description: 'Premium tuna steaks' },
-      { id: 4, name: 'Crab', image: '/assets/Frame 3182 (12).png', price: '$15.99', description: 'Fresh whole crab' }
+      { id: 1, name: 'Salmon', image: '/assets/Frame 3182 (12).png', price: '$12.99', description: 'Fresh wild salmon', stock: 0, inStock: false },
+      { id: 2, name: 'Shrimp', image: '/assets/Frame 3182 (12).png', price: '$10.99', description: 'Large fresh shrimp', stock: 7, inStock: true },
+      { id: 3, name: 'Tuna', image: '/assets/Frame 3182 (12).png', price: '$11.99', description: 'Premium tuna steaks', stock: 3, inStock: true },
+      { id: 4, name: 'Crab', image: '/assets/Frame 3182 (12).png', price: '$15.99', description: 'Fresh whole crab', stock: 0, inStock: false }
     ],
     grains: [
-      { id: 1, name: 'Rice', image: '/assets/Frame 3182 (13).png', price: '$2.99', description: 'Premium long grain rice' },
-      { id: 2, name: 'Wheat', image: '/assets/Frame 3182 (13).png', price: '$3.49', description: 'Whole grain wheat' },
-      { id: 3, name: 'Oats', image: '/assets/Frame 3182 (13).png', price: '$2.79', description: 'Rolled oats' },
-      { id: 4, name: 'Quinoa', image: '/assets/Frame 3182 (13).png', price: '$4.99', description: 'Organic quinoa' }
+      { id: 1, name: 'Rice', image: '/assets/Frame 3182 (13).png', price: '$2.99', description: 'Premium long grain rice', stock: 20, inStock: true },
+      { id: 2, name: 'Wheat', image: '/assets/Frame 3182 (13).png', price: '$3.49', description: 'Whole grain wheat', stock: 0, inStock: false },
+      { id: 3, name: 'Oats', image: '/assets/Frame 3182 (13).png', price: '$2.79', description: 'Rolled oats', stock: 15, inStock: true },
+      { id: 4, name: 'Quinoa', image: '/assets/Frame 3182 (13).png', price: '$4.99', description: 'Organic quinoa', stock: 8, inStock: true }
     ],
     herbs: [
-      { id: 1, name: 'Basil', image: '/assets/Frame 3182 (9).png', price: '$2.99', description: 'Fresh aromatic basil leaves' },
-      { id: 2, name: 'Oregano', image: '/assets/Frame 3182 (9).png', price: '$2.49', description: 'Dried oregano herbs' },
-      { id: 3, name: 'Thyme', image: '/assets/Frame 3182 (9).png', price: '$2.79', description: 'Fresh thyme sprigs' },
-      { id: 4, name: 'Rosemary', image: '/assets/Frame 3182 (9).png', price: '$3.49', description: 'Aromatic rosemary' },
-      { id: 5, name: 'Parsley', image: '/assets/Frame 3182 (9).png', price: '$1.99', description: 'Fresh curly parsley' },
-      { id: 6, name: 'Cilantro', image: '/assets/Frame 3182 (9).png', price: '$2.29', description: 'Fresh cilantro leaves' },
-      { id: 7, name: 'Mint', image: '/assets/Frame 3182 (9).png', price: '$2.99', description: 'Fresh mint leaves' },
-      { id: 8, name: 'Sage', image: '/assets/Frame 3182 (9).png', price: '$3.99', description: 'Dried sage leaves' }
+      { id: 1, name: 'Basil', image: '/assets/Frame 3182 (9).png', price: '$2.99', description: 'Fresh aromatic basil leaves', stock: 6, inStock: true },
+      { id: 2, name: 'Oregano', image: '/assets/Frame 3182 (9).png', price: '$2.49', description: 'Dried oregano herbs', stock: 0, inStock: false },
+      { id: 3, name: 'Thyme', image: '/assets/Frame 3182 (9).png', price: '$2.79', description: 'Fresh thyme sprigs', stock: 4, inStock: true },
+      { id: 4, name: 'Rosemary', image: '/assets/Frame 3182 (9).png', price: '$3.49', description: 'Aromatic rosemary', stock: 9, inStock: true },
+      { id: 5, name: 'Parsley', image: '/assets/Frame 3182 (9).png', price: '$1.99', description: 'Fresh curly parsley', stock: 0, inStock: false },
+      { id: 6, name: 'Cilantro', image: '/assets/Frame 3182 (9).png', price: '$2.29', description: 'Fresh cilantro leaves', stock: 7, inStock: true },
+      { id: 7, name: 'Mint', image: '/assets/Frame 3182 (9).png', price: '$2.99', description: 'Fresh mint leaves', stock: 3, inStock: true },
+      { id: 8, name: 'Sage', image: '/assets/Frame 3182 (9).png', price: '$3.99', description: 'Dried sage leaves', stock: 5, inStock: true }
     ],
     peppers: [
-      { id: 1, name: 'Red Chili Pepper', image: '/assets/Frame 3182 (4).png', price: '$2.99', description: 'Spicy red chili peppers' },
-      { id: 2, name: 'Banana Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.99', description: 'Mild banana peppers' },
-      { id: 3, name: 'Bell Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.79', description: 'Sweet bell peppers' },
-      { id: 4, name: 'Cherry Pepper', image: '/assets/Frame 3182 (4).png', price: '$2.49', description: 'Small cherry peppers' },
-      { id: 5, name: 'Green Tomato Italian Pepper', image: '/assets/Frame 3182 (4).png', price: '$3.99', description: 'Italian green peppers' },
-      { id: 6, name: 'Red Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.99', description: 'Sweet red peppers' },
-      { id: 7, name: 'Cayenne Pepper', image: '/assets/Frame 3182 (4).png', price: '$2.79', description: 'Hot cayenne peppers' },
-      { id: 8, name: 'Carolina Reaper', image: '/assets/Frame 3182 (4).png', price: '$4.99', description: 'Extremely hot Carolina Reaper' }
+      { id: 1, name: 'Red Chili Pepper', image: '/assets/Frame 3182 (4).png', price: '$2.99', description: 'Spicy red chili peppers', stock: 0, inStock: false },
+      { id: 2, name: 'Banana Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.99', description: 'Mild banana peppers', stock: 8, inStock: true },
+      { id: 3, name: 'Bell Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.79', description: 'Sweet bell peppers', stock: 12, inStock: true },
+      { id: 4, name: 'Cherry Pepper', image: '/assets/Frame 3182 (4).png', price: '$2.49', description: 'Small cherry peppers', stock: 0, inStock: false },
+      { id: 5, name: 'Green Tomato Italian Pepper', image: '/assets/Frame 3182 (4).png', price: '$3.99', description: 'Italian green peppers', stock: 3, inStock: true },
+      { id: 6, name: 'Red Pepper', image: '/assets/Frame 3182 (4).png', price: '$1.99', description: 'Sweet red peppers', stock: 6, inStock: true },
+      { id: 7, name: 'Cayenne Pepper', image: '/assets/Frame 3182 (4).png', price: '$2.79', description: 'Hot cayenne peppers', stock: 4, inStock: true },
+      { id: 8, name: 'Carolina Reaper', image: '/assets/Frame 3182 (4).png', price: '$4.99', description: 'Extremely hot Carolina Reaper', stock: 0, inStock: false }
     ],
     goats: [
-      { id: 1, name: 'Goat Milk', image: '/assets/Frame 3182 (15).png', price: '$4.99', description: 'Fresh goat milk' },
-      { id: 2, name: 'Goat Cheese', image: '/assets/Frame 3182 (15).png', price: '$5.99', description: 'Artisan goat cheese' },
-      { id: 3, name: 'Goat Meat', image: '/assets/Frame 3182 (15).png', price: '$8.99', description: 'Fresh goat meat' },
-      { id: 4, name: 'Goat Yogurt', image: '/assets/Frame 3182 (15).png', price: '$3.49', description: 'Creamy goat yogurt' }
+      { id: 1, name: 'Goat Milk', image: '/assets/Frame 3182 (15).png', price: '$4.99', description: 'Fresh goat milk', stock: 5, inStock: true },
+      { id: 2, name: 'Goat Cheese', image: '/assets/Frame 3182 (15).png', price: '$5.99', description: 'Artisan goat cheese', stock: 0, inStock: false },
+      { id: 3, name: 'Goat Meat', image: '/assets/Frame 3182 (15).png', price: '$8.99', description: 'Fresh goat meat', stock: 2, inStock: true },
+      { id: 4, name: 'Goat Yogurt', image: '/assets/Frame 3182 (15).png', price: '$3.49', description: 'Creamy goat yogurt', stock: 7, inStock: true }
     ]
   }), []);
 
   // Create "All Products" category by combining all products
-  const getAllProducts = () => {
+  const getAllProducts = useCallback(() => {
     const allProducts = [];
     Object.entries(categoryProducts).forEach(([categoryName, products]) => {
       products.forEach(product => {
@@ -111,7 +134,7 @@ const ProductListingScreen = ({
       });
     });
     return allProducts;
-  };
+  }, [categoryProducts]);
 
   // Get all available categories
   const getAvailableCategories = () => {
@@ -188,7 +211,7 @@ const ProductListingScreen = ({
       console.log('Setting base products:', baseProducts.length);
       setProducts(baseProducts);
     }
-  }, [category, searchQuery, filterValue, filterCategory, sortValue]);
+  }, [category, searchQuery, filterValue, filterCategory, sortValue, categoryProducts, getAllProducts]);
 
   const getScreenTitle = () => {
     if (category === 'all') {
@@ -231,23 +254,27 @@ const ProductListingScreen = ({
           </button>
       </header>
 
-      {/* Search Bar */}
-      <div className="search-container">
-        <div className="search-bar">
-          <Search size={18} className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Search" 
-            className="search-input"
-            value={searchQuery}
-            readOnly
-          />
-        </div>
-        <button className="notification-btn">
-          <div className="bell-icon">🔔</div>
-          <div className="notification-dot"></div>
-        </button>
-      </div>
+           {/* Search Bar */}
+           {category !== 'all' && (
+        <form className="search-container" onSubmit={(e) => { e.preventDefault(); onSearch(searchQuery); }}>
+          <div className="search-bar">
+            <button type="submit" className="search-submit-btn" aria-label="Search">
+              <Search size={18} className="search-icon" />
+            </button>
+            <input 
+              type="text" 
+              placeholder="Search" 
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <button type="button" className="notification-btn">
+            <div className="bell-icon">🔔</div>
+            <div className="notification-dot"></div>
+          </button>
+        </form>
+      )}
 
       {/* Filter and Sort Bar */}
         {category === 'all' && (
@@ -380,28 +407,37 @@ const ProductListingScreen = ({
            {console.log('Products:', products)}
            {products.length === 0 && <div>No products found</div>}
            {products.map(product => (
-             <div key={product.id} className="product-item">
-               <div className="product-card">
-                 <div className="product-image" onClick={() => onNavigateToProductDetail(product)}>
+             <div key={product.id} className="product-card">
+               <div className="product-image" onClick={() => onNavigateToProductDetail(product)}>
                  <img src={product.image} alt={product.name} />
-                   <div className="product-arrow">
-                     <span className="arrow-icon">→</span>
-                   </div>
-               </div>
-               <div className="product-info">
-                   <div className="product-price">{product.price}</div>
-                 <button
-                   className="add-to-cart-btn"
-                     onClick={(e) => {
-                       e.stopPropagation();
-                       onAddToCart(product);
-                     }}
-                 >
-                     Add to cart
-                 </button>
-               </div>
                </div>
                <h3 className="product-name">{product.name}</h3>
+               <div className="product-info">
+                 <div className="product-price">{product.price}</div>
+                 <div className="stock-info">
+                   {product.inStock ? (
+                     <span className="stock-status in-stock">
+                       {product.stock} remaining
+                     </span>
+                   ) : (
+                     <span className="stock-status out-of-stock">
+                       Out of stock
+                     </span>
+                   )}
+                 </div>
+               </div>
+               <button
+                 className={`add-to-cart-btn ${!product.inStock ? 'disabled' : ''}`}
+                 onClick={(e) => {
+                   e.stopPropagation();
+                   if (product.inStock) {
+                     handleAddToCartAndUpdateStock(product);
+                   }
+                 }}
+                 disabled={!product.inStock}
+               >
+                 {product.inStock ? 'Add to cart' : 'Out of stock'}
+               </button>
              </div>
            ))}
          </div>
@@ -411,7 +447,7 @@ const ProductListingScreen = ({
 
       {/* Bottom Navigation */}
       <nav className="bottom-navigation">
-        <div className="nav-item">
+        <div className="nav-item" onClick={onNavigateToHome}>
           <div className="nav-icon">
             <Home size={20} />
           </div>

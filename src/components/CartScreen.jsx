@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowLeft, User, Plus, Minus, Trash2 } from 'lucide-react';
 
 const CartScreen = ({ 
@@ -6,9 +6,9 @@ const CartScreen = ({
   onBack, 
   onNavigateToHome, 
   onNavigateToAddress,
+  onNavigateToProfile,
   onUpdateQuantity,
-  onRemoveItem,
-  onClearCart
+  onRemoveItem
 }) => {
 
   const updateQuantity = (id, newQuantity) => {
@@ -128,7 +128,7 @@ const CartScreen = ({
             </div>
             <span className="nav-label">Cart</span>
           </div>
-          <div className="nav-item">
+          <div className="nav-item" onClick={onNavigateToProfile}>
             <div className="nav-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
